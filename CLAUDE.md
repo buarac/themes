@@ -48,7 +48,9 @@ Projet Next.js 15 basé sur le template nextjs_template, dédié au développeme
 - **Génération automatique** à partir de 2 couleurs principales (primary/secondary)
 - **Variantes automatiques** : light/dark, muted/vibrant, variants de luminosité
 - **Prévisualisation temps réel** avec application DOM directe
+- **Palette réactive** : mise à jour automatique + bouton de régénération manuelle
 - **Export de code** pour intégration facile dans PREDEFINED_THEMES
+- **Invalidation forcée** avec `useMemo` et clé de régénération
 
 ### Configuration Prisma
 - **Important :** Prisma CLI ne lit que `.env`, pas `.env.local`
@@ -126,6 +128,8 @@ Commandes système critiques
 - **Générateur OKLCH** produisant des palettes complètes
 - **Thèmes prédéfinis** : Produire, Comprendre, Optimiser + demos
 - **Export de code** pour intégration facile des nouveaux thèmes
+- **Palette réactive** avec mise à jour automatique et bouton de régénération
+- **Mode préview amélioré** avec re-application automatique des thèmes
 
 ### 🏗️ Infrastructure
 - Base de données `themes-dev` créée sur NUC

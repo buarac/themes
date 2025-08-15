@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -8,7 +8,7 @@ import { Alert } from "@/components/ui/alert"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Copy, Download, Palette, Eye, Code, Lightbulb } from "lucide-react"
+import { Copy, Palette, Eye, Code, Lightbulb, RefreshCw } from "lucide-react"
 import { generateTheme, applyTheme } from "@/lib/theme-generator"
 import { ThemeSwitcher } from "@/components/theme/theme-switcher"
 import { MainNav } from "@/components/navigation/main-nav"
@@ -28,15 +28,30 @@ export default function ThemeEditor() {
   
   const [isPreviewMode, setIsPreviewMode] = useState(false)
   const [showCode, setShowCode] = useState(false)
+  const [paletteKey, setPaletteKey] = useState(0) // Pour forcer le re-render de la palette
   
-  // Générer le thème en temps réel
-  const generatedTheme = generateTheme(themeConfig.primary, themeConfig.secondary)
+  // Générer le thème en temps réel avec invalidation forcée
+  const generatedTheme = useMemo(() => {
+    return generateTheme(themeConfig.primary, themeConfig.secondary)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [themeConfig.primary, themeConfig.secondary, paletteKey])
   
   const handleColorChange = (type: 'primary' | 'secondary', value: string) => {
     setThemeConfig(prev => ({
       ...prev,
       [type]: value
     }))
+    // Forcer la régénération de la palette
+    setPaletteKey(prev => prev + 1)
+  }
+  
+  const handleRegenerateTheme = () => {
+    // Force la régénération complète du thème
+    setPaletteKey(prev => prev + 1)
+    if (isPreviewMode) {
+      // Re-appliquer le thème si on est en mode préview
+      applyTheme(generatedTheme, 'light')
+    }
   }
   
   const handlePreview = () => {
@@ -135,7 +150,7 @@ export default function ThemeEditor() {
                         className="font-mono"
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Utilisée pour les boutons, liens et éléments d'action
+                        Utilisée pour les boutons, liens et éléments d&apos;action
                       </p>
                     </div>
                   </div>
@@ -170,12 +185,23 @@ export default function ThemeEditor() {
 
                 {/* Palette générée */}
                 <div className="space-y-3">
-                  <Label>Palette générée automatiquement</Label>
-                  <div className="grid grid-cols-8 gap-2">
+                  <div className="flex items-center justify-between">
+                    <Label>Palette générée automatiquement</Label>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={handleRegenerateTheme}
+                      className="h-8"
+                    >
+                      <RefreshCw className="h-3 w-3 mr-1" />
+                      Régénérer
+                    </Button>
+                  </div>
+                  <div key={paletteKey} className="grid grid-cols-8 gap-2">
                     {Object.entries(generatedTheme.light).slice(0, 8).map(([key, color]) => (
                       <div key={key} className="text-center">
                         <div 
-                          className="w-full h-8 rounded border border-border"
+                          className="w-full h-8 rounded border border-border transition-all duration-300"
                           style={{ backgroundColor: color }}
                           title={`${key}: ${color}`}
                         />
@@ -183,6 +209,9 @@ export default function ThemeEditor() {
                       </div>
                     ))}
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    La palette se met à jour automatiquement. Utilisez &quot;Régénérer&quot; pour forcer le rafraîchissement.
+                  </p>
                 </div>
 
               </CardContent>
