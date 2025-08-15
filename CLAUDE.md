@@ -1,112 +1,59 @@
-# Contexte Claude Code - Template Next.js
+# Contexte Claude Code - Projet Themes
 
 ## Vue d'ensemble du projet
 
-Template Next.js 15 avec App Router, TypeScript, NextAuth.js 5, Prisma, et système de déploiement multi-environnement avec PostgreSQL centralisé sur NUC.
+Projet Next.js 15 basé sur le template nextjs_template, dédié au développement d'un système de thèmes avancé.
 
-## Travaux réalisés
-
-### 1. Séparation des outils de déploiement
-
-**Date :** Août 2024  
-**Objectif :** Séparer les outils de déploiement du template pour créer un système réutilisable
-
-**Réalisations :**
-- Création du projet `deployment_tools` autonome
-- Scripts de déploiement universels (`deploy-universal.sh`)
-- Configurations PM2 multi-environnement (dev/staging/prod)
-- Documentation complète (50+ pages dans `TEMPLATE_GUIDE.md`)
-- Architecture NUC PostgreSQL centralisée (192.168.1.30)
-
-### 2. Workflow de test établi
-
-**Projet de test :** `test_nextjs_template`  
-**Méthode :**
-1. Utilisateur teste sur projet de test
-2. Rapport des problèmes rencontrés
-3. Application des fixes sur projet de test
-4. Validation utilisateur
-5. Application des fixes sur template principal
-6. Maintien d'une liste des corrections pour commit final
-
-### 3. Corrections appliquées (6 fixes)
-
-#### Fix 1: .gitignore pour fichiers .env.example
-- **Problème :** `.env*` excluait les fichiers `.env.example` nécessaires
-- **Solution :** Spécification explicite avec exceptions `!.env.example`
-- **Statut :** ✅ Validé et appliqué
-
-#### Fix 2: Documentation du script create-database.sh
-- **Problème :** Manque d'aide et d'exemples d'utilisation
-- **Solution :** Ajout option `--help` avec documentation complète
-- **Statut :** ✅ Validé et appliqué
-
-#### Fix 3: Erreurs SQL de suppression
-- **Problème :** Ordre incorrect des opérations DROP (contraintes violées)
-- **Solution :** Réorganisation : terminer connexions → DROP DATABASE → DROP USER
-- **Statut :** ✅ Validé et appliqué
-
-#### Fix 4: Modes de sécurité pour la base de données
-- **Problème :** Script dangereux supprimant toujours les données existantes
-- **Solution :** Ajout modes `--force`, `--safe`, `--check` avec protections par environnement
-- **Statut :** ✅ Validé et appliqué
-
-#### Fix 5: Simplification interface
-- **Problème :** Options `--safe` et `--check` redondantes
-- **Solution :** Suppression `--safe`, conservation `--check` + logique par défaut
-- **Statut :** ✅ Validé et appliqué
-
-#### Fix 6: Option de suppression complète
-- **Demande utilisateur :** Besoin d'une option pour supprimer base et utilisateur
-- **Solution :** Ajout option `--delete` avec confirmations sécurisées
-- **Statut :** ✅ Validé et appliqué
+**Application complète de génération et test de thèmes UI** avec :
+- Système de thèmes basé sur OKLCH (couleurs perceptuellement uniformes)
+- Génération automatique de palettes à partir de 2 couleurs principales
+- Prévisualisation temps réel sur tous les composants Shadcn/ui
+- Éditeur interactif de thèmes avec export de code
+- Interface responsive avec navigation unifiée
 
 ## Architecture technique
 
-### Base de données PostgreSQL
+### Stack
+- **Framework :** Next.js 15 avec App Router et Turbopack
+- **Langage :** TypeScript
+- **Authentification :** NextAuth.js v5 (GitHub, Google)
+- **Base de données :** PostgreSQL sur NUC (192.168.1.30:5432)
+- **ORM :** Prisma
+- **Styling :** Tailwind CSS 4 + Shadcn/ui
+- **Couleurs :** Système OKLCH pour uniformité perceptuelle
+- **Déploiement :** PM2 multi-environnement
+
+### Base de données
 - **Serveur :** NUC à l'adresse 192.168.1.30:5432
-- **Naming :** Format `projet-environnement` (ex: `mon-app-dev`)
-- **Utilisateurs :** Format `user_projet_environnement`
-- **Sécurité :** Mots de passe générés automatiquement
+- **Base :** `themes-dev`
+- **Utilisateur :** `user_themes_dev`
+- **Configuration :** DATABASE_URL dans `.env.local` ET `.env` (requis pour Prisma CLI)
 
-### Scripts disponibles
-```bash
-# Création base de données
-./scripts/create-database.sh [projet] [dev|staging|stable] [ip]
-./scripts/create-database.sh --help          # Documentation
-./scripts/create-database.sh --check         # Vérification
-./scripts/create-database.sh --force         # Force recréation  
-./scripts/create-database.sh --delete        # Suppression complète
+## Structure de l'application
 
-# Configuration projet
-./scripts/setup-project.sh                   # Configuration initiale
-```
+### Pages principales
+- **`/`** - Page d'accueil avec présentation du générateur de thèmes
+- **`/demo`** - Démonstration de tous les composants Shadcn/ui avec sélecteur de thèmes
+- **`/theme-editor`** - Éditeur interactif pour créer des thèmes personnalisés
 
-### Environnements
-- **dev :** Base locale de développement (confirmations interactives)
-- **staging :** Pré-production (protections strictes)
-- **stable :** Production (protections maximales)
+### Composants clés
+- **`MainNav`** - Navigation principale avec highlighting automatique
+- **`AdvancedThemeSwitcher`** - Sélecteur de thèmes avec aperçu dual-color
+- **`ThemeGenerator`** - Système de génération de palettes OKLCH
+- **Thèmes prédéfinis** - Produire, Comprendre, Optimiser + thèmes demo
 
-## État du projet
+## Particularités du projet
 
-### ✅ Fonctionnel
-- Application Next.js démarre correctement
-- Authentification GitHub/Google opérationnelle
-- Base de données PostgreSQL connectée
-- Scripts de gestion de base sécurisés
-- Outils de déploiement séparés et réutilisables
+### Système de thèmes OKLCH
+- **Génération automatique** à partir de 2 couleurs principales (primary/secondary)
+- **Variantes automatiques** : light/dark, muted/vibrant, variants de luminosité
+- **Prévisualisation temps réel** avec application DOM directe
+- **Export de code** pour intégration facile dans PREDEFINED_THEMES
 
-### 🔄 Testé avec succès
-- Template cloné et configuré sur `test_nextjs_template`
-- Tous les 6 fixes validés en conditions réelles
-- Application accessible via Safari
-- PM2 opérationnel
-
-### 📋 Fichiers clés
-- `/scripts/create-database.sh` : Gestion base de données sécurisée
-- `/docs/TEMPLATE_GUIDE.md` : Guide d'utilisation complet
-- `/.env.example` et `/.env.nuc.example` : Templates de configuration
-- `/scripts/setup-project.sh` : Configuration initiale projet
+### Configuration Prisma
+- **Important :** Prisma CLI ne lit que `.env`, pas `.env.local`
+- **Solution :** Copier `.env.local` vers `.env` avant les commandes Prisma
+- **Commande :** `cp .env.local .env`
 
 ## Commandes pré-autorisées
 
@@ -117,39 +64,49 @@ git status
 git log --oneline -10
 git diff
 pm2 list
-pm2 show [app-name]
+pm2 show themes
 
 # Linting et vérifications
 npm run lint
 npm run typecheck
 npm run build --dry-run
 
+# Prisma (après cp .env.local .env)
+npx prisma generate
+npx prisma db pull
+npx prisma migrate status
+npx prisma studio --port 5556
+
 # Scripts de base de données (lecture seule)
 ./scripts/create-database.sh --help
-./scripts/create-database.sh --check [args]
+./scripts/create-database.sh --check themes dev
 
 # Lecture de fichiers et exploration
 ls, cat, grep, find (lecture seule)
-psql [connection] -c "SELECT 1;" # Test de connexion
+psql "postgresql://user_themes_dev:g2qgx6RhYBSdXK0hPdnbiqka9@192.168.1.30:5432/themes-dev" -c "SELECT 1;"
 
 # Installation de dépendances
 npm install
 npm ci
 ```
 
-### ⚠️ Demander confirmation avant
+### ⚠️ À demander confirmation avant
 ```bash
 # Modifications critiques
 git commit
 git push
-pm2 stop/restart/delete
+pm2 stop/restart/delete themes
+
+# Base de données
+npx prisma migrate dev
+npx prisma db push
 ./scripts/create-database.sh --force/--delete
 
 # Modifications de fichiers sensibles
-Édition de .env*, package.json, tsconfig.json, prisma/schema.prisma
+édition de .env*, package.json, tsconfig.json, prisma/schema.prisma
 
 # Opérations de base de données
-CREATE/DROP/ALTER sur la base de données
+CREATE/DROP/ALTER sur la base themes-dev
 ```
 
 ### ❌ Jamais autoriser automatiquement
@@ -159,24 +116,41 @@ git reset --hard, git rebase
 Commandes système critiques
 ```
 
-## Prochaines instructions pour Claude
+## État du projet
 
-Pour reprendre le travail sur ce template :
+### ✅ Fonctionnalités implémentées
+- **Page d'accueil** complète avec présentation et navigation
+- **Page de démonstration** avec tous les composants Shadcn/ui
+- **Éditeur de thèmes** interactif avec prévisualisation temps réel
+- **Système de navigation** unifié entre toutes les pages
+- **Générateur OKLCH** produisant des palettes complètes
+- **Thèmes prédéfinis** : Produire, Comprendre, Optimiser + demos
+- **Export de code** pour intégration facile des nouveaux thèmes
 
-1. **Nouveau problème détecté :** Suivre le workflow de test établi
-2. **Nouvelle fonctionnalité :** Référencer cette documentation pour comprendre l'architecture
-3. **Déploiement :** Utiliser les outils séparés dans le projet `deployment_tools`
-4. **Base de données :** Utiliser les scripts sécurisés avec les options appropriées
-5. **Commandes :** Référencer la liste des commandes pré-autorisées ci-dessus
+### 🏗️ Infrastructure
+- Base de données `themes-dev` créée sur NUC
+- Variables d'environnement configurées
+- Fichier `.env` créé pour compatibilité Prisma CLI
+- PM2 configuré pour le déploiement
+
+## Fichiers clés du projet
+
+### Composants principaux
+- **`src/lib/theme-generator.ts`** - Logique de génération OKLCH
+- **`src/components/navigation/main-nav.tsx`** - Navigation globale
+- **`src/components/theme/advanced-theme-switcher.tsx`** - Sélecteur avancé
+- **`src/app/page.tsx`** - Page d'accueil personnalisée
+- **`src/app/demo/page.tsx`** - Démonstration complète
+- **`src/app/theme-editor/page.tsx`** - Éditeur interactif
 
 ## Notes importantes
 
+- **Toujours** copier `.env.local` vers `.env` avant les commandes Prisma CLI
 - **Jamais** créer de nouveaux fichiers sans nécessité absolue
-- **Toujours** préférer éditer les fichiers existants
-- **Systématiquement** tester sur `test_nextjs_template` avant d'appliquer au template principal
-- **Obligatoirement** demander validation utilisateur avant commit
-- Les outils de déploiement sont désormais dans un projet séparé et réutilisable
+- **Systématiquement** demander validation avant commit
+- **Système OKLCH** assure l'uniformité perceptuelle des couleurs
+- Projet basé sur le template nextjs_template documenté
 
 ---
 *Dernière mise à jour : 14 août 2025*  
-*Template testé et opérationnel avec 6 fixes appliqués*
+*Projet : Application de génération de thèmes complète et fonctionnelle*

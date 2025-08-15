@@ -1,107 +1,168 @@
-import Image from "next/image";
-import { APP_NAME, APP_VERSION } from "@/constants";
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { MainNav } from "@/components/navigation/main-nav"
+import { ThemeSwitcher } from "@/components/theme/theme-switcher"
+import { Eye, Palette, Lightbulb, Zap, Paintbrush } from "lucide-react"
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center justify-between">
+          <div className="flex items-center gap-6">
+            <h1 className="text-xl font-semibold">Themes</h1>
+            <MainNav />
+          </div>
+          <ThemeSwitcher />
+        </div>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Hero Section */}
+      <section className="container py-16 md:py-24">
+        <div className="text-center space-y-6">
+          <div className="space-y-2">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+              Générateur de Thèmes
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Créez et testez des thèmes personnalisés avec notre système avancé basé sur OKLCH
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap gap-2 justify-center">
+            <Badge variant="secondary">OKLCH Colors</Badge>
+            <Badge variant="secondary">Real-time Preview</Badge>
+            <Badge variant="secondary">Shadcn/ui</Badge>
+            <Badge variant="secondary">Auto Dark Mode</Badge>
+          </div>
+
+          <div className="flex gap-4 justify-center flex-col sm:flex-row">
+            <Button size="lg" asChild>
+              <Link href="/demo">
+                <Eye className="mr-2 h-5 w-5" />
+                Voir la Démo
+              </Link>
+            </Button>
+            <Button variant="outline" size="lg" asChild>
+              <Link href="/theme-editor">
+                <Palette className="mr-2 h-5 w-5" />
+                Créer un Thème
+              </Link>
+            </Button>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <div className="text-sm text-muted-foreground">
-          {APP_NAME} v{APP_VERSION}
+      </section>
+
+      {/* Features */}
+      <section className="container py-16">
+        <div className="text-center space-y-2 mb-12">
+          <h2 className="text-3xl font-bold">Fonctionnalités</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Découvrez les capacités de notre système de thèmes
+          </p>
         </div>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        
+        <div className="grid gap-6 md:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Lightbulb className="h-5 w-5" />
+                Génération Intelligente
+              </CardTitle>
+              <CardDescription>
+                Créez des palettes complètes à partir de seulement 2 couleurs principales
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Notre algorithme génère automatiquement toutes les variantes nécessaires 
+                (light/dark, muted, vibrant) en utilisant l'espace colorimétrique OKLCH.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5" />
+                Prévisualisation Temps Réel
+              </CardTitle>
+              <CardDescription>
+                Testez vos thèmes instantanément sur tous les composants
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Visualisez immédiatement l'impact de vos changements sur l'ensemble 
+                de l'interface utilisateur avec notre système de prévisualisation.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Paintbrush className="h-5 w-5" />
+                Export Facile
+              </CardTitle>
+              <CardDescription>
+                Exportez vos thèmes pour les intégrer facilement
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Générez automatiquement le code nécessaire pour intégrer 
+                vos thèmes personnalisés dans votre application.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Quick Start */}
+      <section className="container py-16 border-t">
+        <div className="text-center space-y-2 mb-8">
+          <h2 className="text-2xl font-bold">Commencer</h2>
+          <p className="text-muted-foreground">
+            Explorez nos outils en quelques clics
+          </p>
+        </div>
+        
+        <div className="flex gap-4 justify-center">
+          <Card className="w-full max-w-sm">
+            <CardHeader className="text-center">
+              <Eye className="h-8 w-8 mx-auto mb-2" />
+              <CardTitle>Démonstration</CardTitle>
+              <CardDescription>
+                Découvrez tous les composants avec différents thèmes prédéfinis
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button className="w-full" asChild>
+                <Link href="/demo">Voir la Démo</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="w-full max-w-sm">
+            <CardHeader className="text-center">
+              <Palette className="h-8 w-8 mx-auto mb-2" />
+              <CardTitle>Éditeur de Thèmes</CardTitle>
+              <CardDescription>
+                Créez votre propre thème avec notre éditeur interactif
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button className="w-full" variant="outline" asChild>
+                <Link href="/theme-editor">Créer un Thème</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
     </div>
-  );
+  )
 }

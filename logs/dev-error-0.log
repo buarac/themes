@@ -1,0 +1,175 @@
+2025-08-14 23:40:31 +02:00:  ⨯ ./src/app/theme-editor/page.tsx:8:1
+2025-08-14 23:40:31 +02:00: Module not found: Can't resolve '@/components/ui/input'
+2025-08-14 23:40:31 +02:00: [0m [90m  6 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m
+2025-08-14 23:40:31 +02:00:  [90m  7 |[39m [36mimport[39m { [33mAlert[39m } [36mfrom[39m [32m"@/components/ui/alert"[39m
+2025-08-14 23:40:31 +02:00: [31m[1m>[22m[39m[90m  8 |[39m [36mimport[39m { [33mInput[39m } [36mfrom[39m [32m"@/components/ui/input"[39m
+2025-08-14 23:40:31 +02:00:  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+2025-08-14 23:40:31 +02:00:  [90m  9 |[39m [36mimport[39m { [33mLabel[39m } [36mfrom[39m [32m"@/components/ui/label"[39m
+2025-08-14 23:40:31 +02:00:  [90m 10 |[39m [36mimport[39m { [33mTextarea[39m } [36mfrom[39m [32m"@/components/ui/textarea"[39m
+2025-08-14 23:40:31 +02:00:  [90m 11 |[39m [36mimport[39m { [33mCopy[39m[33m,[39m [33mDownload[39m[33m,[39m [33mPalette[39m[33m,[39m [33mEye[39m[33m,[39m [33mCode[39m[33m,[39m [33mLightbulb[39m } [36mfrom[39m [32m"lucide-react"[39m[0m
+2025-08-14 23:40:31 +02:00: 
+2025-08-14 23:40:31 +02:00: Import map: aliased to relative './src/components/ui/input' inside of [project]/
+2025-08-14 23:40:31 +02:00: 
+2025-08-14 23:40:31 +02:00: 
+2025-08-14 23:40:31 +02:00: Import traces:
+2025-08-14 23:40:31 +02:00:   Client Component Browser:
+2025-08-14 23:40:31 +02:00:     ./src/app/theme-editor/page.tsx [Client Component Browser]
+2025-08-14 23:40:31 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:40:31 +02:00: 
+2025-08-14 23:40:31 +02:00:   Client Component SSR:
+2025-08-14 23:40:31 +02:00:     ./src/app/theme-editor/page.tsx [Client Component SSR]
+2025-08-14 23:40:31 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:40:31 +02:00: 
+2025-08-14 23:40:31 +02:00: https://nextjs.org/docs/messages/module-not-found
+2025-08-14 23:40:31 +02:00: 
+2025-08-14 23:40:31 +02:00: 
+2025-08-14 23:40:32 +02:00:  ⨯ ./src/app/theme-editor/page.tsx:8:1
+2025-08-14 23:40:32 +02:00: Module not found: Can't resolve '@/components/ui/input'
+2025-08-14 23:40:32 +02:00: [0m [90m  6 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m
+2025-08-14 23:40:32 +02:00:  [90m  7 |[39m [36mimport[39m { [33mAlert[39m } [36mfrom[39m [32m"@/components/ui/alert"[39m
+2025-08-14 23:40:32 +02:00: [31m[1m>[22m[39m[90m  8 |[39m [36mimport[39m { [33mInput[39m } [36mfrom[39m [32m"@/components/ui/input"[39m
+2025-08-14 23:40:32 +02:00:  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+2025-08-14 23:40:32 +02:00:  [90m  9 |[39m [36mimport[39m { [33mLabel[39m } [36mfrom[39m [32m"@/components/ui/label"[39m
+2025-08-14 23:40:32 +02:00:  [90m 10 |[39m [36mimport[39m { [33mTextarea[39m } [36mfrom[39m [32m"@/components/ui/textarea"[39m
+2025-08-14 23:40:32 +02:00:  [90m 11 |[39m [36mimport[39m { [33mCopy[39m[33m,[39m [33mDownload[39m[33m,[39m [33mPalette[39m[33m,[39m [33mEye[39m[33m,[39m [33mCode[39m[33m,[39m [33mLightbulb[39m } [36mfrom[39m [32m"lucide-react"[39m[0m
+2025-08-14 23:40:32 +02:00: 
+2025-08-14 23:40:32 +02:00: Import map: aliased to relative './src/components/ui/input' inside of [project]/
+2025-08-14 23:40:32 +02:00: 
+2025-08-14 23:40:32 +02:00: 
+2025-08-14 23:40:32 +02:00: Import traces:
+2025-08-14 23:40:32 +02:00:   Client Component Browser:
+2025-08-14 23:40:32 +02:00:     ./src/app/theme-editor/page.tsx [Client Component Browser]
+2025-08-14 23:40:32 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:40:32 +02:00: 
+2025-08-14 23:40:32 +02:00:   Client Component SSR:
+2025-08-14 23:40:32 +02:00:     ./src/app/theme-editor/page.tsx [Client Component SSR]
+2025-08-14 23:40:32 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:40:32 +02:00: 
+2025-08-14 23:40:32 +02:00: https://nextjs.org/docs/messages/module-not-found
+2025-08-14 23:40:32 +02:00: 
+2025-08-14 23:40:32 +02:00: 
+2025-08-14 23:41:08 +02:00:  ⨯ ./src/app/theme-editor/page.tsx:8:1
+2025-08-14 23:41:08 +02:00: Module not found: Can't resolve '@/components/ui/input'
+2025-08-14 23:41:08 +02:00: [0m [90m  6 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m
+2025-08-14 23:41:08 +02:00:  [90m  7 |[39m [36mimport[39m { [33mAlert[39m } [36mfrom[39m [32m"@/components/ui/alert"[39m
+2025-08-14 23:41:08 +02:00: [31m[1m>[22m[39m[90m  8 |[39m [36mimport[39m { [33mInput[39m } [36mfrom[39m [32m"@/components/ui/input"[39m
+2025-08-14 23:41:08 +02:00:  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+2025-08-14 23:41:08 +02:00:  [90m  9 |[39m [36mimport[39m { [33mLabel[39m } [36mfrom[39m [32m"@/components/ui/label"[39m
+2025-08-14 23:41:08 +02:00:  [90m 10 |[39m [36mimport[39m { [33mTextarea[39m } [36mfrom[39m [32m"@/components/ui/textarea"[39m
+2025-08-14 23:41:08 +02:00:  [90m 11 |[39m [36mimport[39m { [33mCopy[39m[33m,[39m [33mDownload[39m[33m,[39m [33mPalette[39m[33m,[39m [33mEye[39m[33m,[39m [33mCode[39m[33m,[39m [33mLightbulb[39m } [36mfrom[39m [32m"lucide-react"[39m[0m
+2025-08-14 23:41:08 +02:00: 
+2025-08-14 23:41:08 +02:00: Import map: aliased to relative './src/components/ui/input' inside of [project]/
+2025-08-14 23:41:08 +02:00: 
+2025-08-14 23:41:08 +02:00: 
+2025-08-14 23:41:08 +02:00: Import traces:
+2025-08-14 23:41:08 +02:00:   Client Component Browser:
+2025-08-14 23:41:08 +02:00:     ./src/app/theme-editor/page.tsx [Client Component Browser]
+2025-08-14 23:41:08 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:41:08 +02:00: 
+2025-08-14 23:41:08 +02:00:   Client Component SSR:
+2025-08-14 23:41:08 +02:00:     ./src/app/theme-editor/page.tsx [Client Component SSR]
+2025-08-14 23:41:08 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:41:08 +02:00: 
+2025-08-14 23:41:08 +02:00: https://nextjs.org/docs/messages/module-not-found
+2025-08-14 23:41:08 +02:00: 
+2025-08-14 23:41:08 +02:00: 
+2025-08-14 23:41:14 +02:00:  ⨯ ./src/app/theme-editor/page.tsx:8:1
+2025-08-14 23:41:14 +02:00: Module not found: Can't resolve '@/components/ui/input'
+2025-08-14 23:41:14 +02:00: [0m [90m  6 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m
+2025-08-14 23:41:14 +02:00:  [90m  7 |[39m [36mimport[39m { [33mAlert[39m } [36mfrom[39m [32m"@/components/ui/alert"[39m
+2025-08-14 23:41:14 +02:00: [31m[1m>[22m[39m[90m  8 |[39m [36mimport[39m { [33mInput[39m } [36mfrom[39m [32m"@/components/ui/input"[39m
+2025-08-14 23:41:14 +02:00:  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+2025-08-14 23:41:14 +02:00:  [90m  9 |[39m [36mimport[39m { [33mLabel[39m } [36mfrom[39m [32m"@/components/ui/label"[39m
+2025-08-14 23:41:14 +02:00:  [90m 10 |[39m [36mimport[39m { [33mTextarea[39m } [36mfrom[39m [32m"@/components/ui/textarea"[39m
+2025-08-14 23:41:14 +02:00:  [90m 11 |[39m [36mimport[39m { [33mCopy[39m[33m,[39m [33mDownload[39m[33m,[39m [33mPalette[39m[33m,[39m [33mEye[39m[33m,[39m [33mCode[39m[33m,[39m [33mLightbulb[39m } [36mfrom[39m [32m"lucide-react"[39m[0m
+2025-08-14 23:41:14 +02:00: 
+2025-08-14 23:41:14 +02:00: Import map: aliased to relative './src/components/ui/input' inside of [project]/
+2025-08-14 23:41:14 +02:00: 
+2025-08-14 23:41:14 +02:00: 
+2025-08-14 23:41:14 +02:00: Import traces:
+2025-08-14 23:41:14 +02:00:   Client Component Browser:
+2025-08-14 23:41:14 +02:00:     ./src/app/theme-editor/page.tsx [Client Component Browser]
+2025-08-14 23:41:14 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:41:14 +02:00: 
+2025-08-14 23:41:14 +02:00:   Client Component SSR:
+2025-08-14 23:41:14 +02:00:     ./src/app/theme-editor/page.tsx [Client Component SSR]
+2025-08-14 23:41:14 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:41:14 +02:00: 
+2025-08-14 23:41:14 +02:00: https://nextjs.org/docs/messages/module-not-found
+2025-08-14 23:41:14 +02:00: 
+2025-08-14 23:41:14 +02:00: 
+2025-08-14 23:41:27 +02:00:  ⨯ ./src/app/theme-editor/page.tsx:8:1
+2025-08-14 23:41:27 +02:00: Module not found: Can't resolve '@/components/ui/input'
+2025-08-14 23:41:27 +02:00: [0m [90m  6 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m
+2025-08-14 23:41:27 +02:00:  [90m  7 |[39m [36mimport[39m { [33mAlert[39m } [36mfrom[39m [32m"@/components/ui/alert"[39m
+2025-08-14 23:41:27 +02:00: [31m[1m>[22m[39m[90m  8 |[39m [36mimport[39m { [33mInput[39m } [36mfrom[39m [32m"@/components/ui/input"[39m
+2025-08-14 23:41:27 +02:00:  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+2025-08-14 23:41:27 +02:00:  [90m  9 |[39m [36mimport[39m { [33mLabel[39m } [36mfrom[39m [32m"@/components/ui/label"[39m
+2025-08-14 23:41:27 +02:00:  [90m 10 |[39m [36mimport[39m { [33mTextarea[39m } [36mfrom[39m [32m"@/components/ui/textarea"[39m
+2025-08-14 23:41:27 +02:00:  [90m 11 |[39m [36mimport[39m { [33mCopy[39m[33m,[39m [33mDownload[39m[33m,[39m [33mPalette[39m[33m,[39m [33mEye[39m[33m,[39m [33mCode[39m[33m,[39m [33mLightbulb[39m } [36mfrom[39m [32m"lucide-react"[39m[0m
+2025-08-14 23:41:27 +02:00: 
+2025-08-14 23:41:27 +02:00: Import map: aliased to relative './src/components/ui/input' inside of [project]/
+2025-08-14 23:41:27 +02:00: 
+2025-08-14 23:41:27 +02:00: 
+2025-08-14 23:41:27 +02:00: Import traces:
+2025-08-14 23:41:27 +02:00:   Client Component Browser:
+2025-08-14 23:41:27 +02:00:     ./src/app/theme-editor/page.tsx [Client Component Browser]
+2025-08-14 23:41:27 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:41:27 +02:00: 
+2025-08-14 23:41:27 +02:00:   Client Component SSR:
+2025-08-14 23:41:27 +02:00:     ./src/app/theme-editor/page.tsx [Client Component SSR]
+2025-08-14 23:41:27 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:41:27 +02:00: 
+2025-08-14 23:41:27 +02:00: https://nextjs.org/docs/messages/module-not-found
+2025-08-14 23:41:27 +02:00: 
+2025-08-14 23:41:27 +02:00: 
+2025-08-14 23:42:30 +02:00:  ⨯ ./src/app/theme-editor/page.tsx:8:1
+2025-08-14 23:42:30 +02:00: Module not found: Can't resolve '@/components/ui/input'
+2025-08-14 23:42:30 +02:00: [0m [90m  6 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m
+2025-08-14 23:42:30 +02:00:  [90m  7 |[39m [36mimport[39m { [33mAlert[39m } [36mfrom[39m [32m"@/components/ui/alert"[39m
+2025-08-14 23:42:30 +02:00: [31m[1m>[22m[39m[90m  8 |[39m [36mimport[39m { [33mInput[39m } [36mfrom[39m [32m"@/components/ui/input"[39m
+2025-08-14 23:42:30 +02:00:  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+2025-08-14 23:42:30 +02:00:  [90m  9 |[39m [36mimport[39m { [33mLabel[39m } [36mfrom[39m [32m"@/components/ui/label"[39m
+2025-08-14 23:42:30 +02:00:  [90m 10 |[39m [36mimport[39m { [33mTextarea[39m } [36mfrom[39m [32m"@/components/ui/textarea"[39m
+2025-08-14 23:42:30 +02:00:  [90m 11 |[39m [36mimport[39m { [33mCopy[39m[33m,[39m [33mDownload[39m[33m,[39m [33mPalette[39m[33m,[39m [33mEye[39m[33m,[39m [33mCode[39m[33m,[39m [33mLightbulb[39m } [36mfrom[39m [32m"lucide-react"[39m[0m
+2025-08-14 23:42:30 +02:00: 
+2025-08-14 23:42:30 +02:00: Import map: aliased to relative './src/components/ui/input' inside of [project]/
+2025-08-14 23:42:30 +02:00: 
+2025-08-14 23:42:30 +02:00: 
+2025-08-14 23:42:30 +02:00: Import traces:
+2025-08-14 23:42:30 +02:00:   Client Component Browser:
+2025-08-14 23:42:30 +02:00:     ./src/app/theme-editor/page.tsx [Client Component Browser]
+2025-08-14 23:42:30 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:42:30 +02:00: 
+2025-08-14 23:42:30 +02:00:   Client Component SSR:
+2025-08-14 23:42:30 +02:00:     ./src/app/theme-editor/page.tsx [Client Component SSR]
+2025-08-14 23:42:30 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-14 23:42:30 +02:00: 
+2025-08-14 23:42:30 +02:00: https://nextjs.org/docs/messages/module-not-found
+2025-08-14 23:42:30 +02:00: 
+2025-08-14 23:42:30 +02:00: 
+2025-08-15 08:01:10 +02:00:  ⨯ ./src/app/theme-editor/page.tsx:8:1
+2025-08-15 08:01:10 +02:00: Module not found: Can't resolve '@/components/ui/input'
+2025-08-15 08:01:10 +02:00: [0m [90m  6 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m
+2025-08-15 08:01:10 +02:00:  [90m  7 |[39m [36mimport[39m { [33mAlert[39m } [36mfrom[39m [32m"@/components/ui/alert"[39m
+2025-08-15 08:01:10 +02:00: [31m[1m>[22m[39m[90m  8 |[39m [36mimport[39m { [33mInput[39m } [36mfrom[39m [32m"@/components/ui/input"[39m
+2025-08-15 08:01:10 +02:00:  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+2025-08-15 08:01:10 +02:00:  [90m  9 |[39m [36mimport[39m { [33mLabel[39m } [36mfrom[39m [32m"@/components/ui/label"[39m
+2025-08-15 08:01:10 +02:00:  [90m 10 |[39m [36mimport[39m { [33mTextarea[39m } [36mfrom[39m [32m"@/components/ui/textarea"[39m
+2025-08-15 08:01:10 +02:00:  [90m 11 |[39m [36mimport[39m { [33mCopy[39m[33m,[39m [33mDownload[39m[33m,[39m [33mPalette[39m[33m,[39m [33mEye[39m[33m,[39m [33mCode[39m[33m,[39m [33mLightbulb[39m } [36mfrom[39m [32m"lucide-react"[39m[0m
+2025-08-15 08:01:10 +02:00: 
+2025-08-15 08:01:10 +02:00: Import map: aliased to relative './src/components/ui/input' inside of [project]/
+2025-08-15 08:01:10 +02:00: 
+2025-08-15 08:01:10 +02:00: 
+2025-08-15 08:01:10 +02:00: Import traces:
+2025-08-15 08:01:10 +02:00:   Client Component Browser:
+2025-08-15 08:01:10 +02:00:     ./src/app/theme-editor/page.tsx [Client Component Browser]
+2025-08-15 08:01:10 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-15 08:01:10 +02:00: 
+2025-08-15 08:01:10 +02:00:   Client Component SSR:
+2025-08-15 08:01:10 +02:00:     ./src/app/theme-editor/page.tsx [Client Component SSR]
+2025-08-15 08:01:10 +02:00:     ./src/app/theme-editor/page.tsx [Server Component]
+2025-08-15 08:01:10 +02:00: 
+2025-08-15 08:01:10 +02:00: https://nextjs.org/docs/messages/module-not-found
+2025-08-15 08:01:10 +02:00: 
+2025-08-15 08:01:10 +02:00: 
