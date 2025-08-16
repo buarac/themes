@@ -1,29 +1,27 @@
-// Utilitaires pour la génération de thèmes à partir de couleurs de base
+// Générateur de thèmes complets avec OKLCH, polices, espacement, rayons et ombres
 
 /**
- * Convertit une couleur hex vers oklch
+ * Interface pour un thème complet
  */
-function hexToOklch(hex: string): { l: number; c: number; h: number } {
-  // Conversion simplifiée - en production, utiliser une lib comme culori
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
-  
-  // Conversion approximative RGB vers OKLCH
-  const l = 0.299 * r + 0.587 * g + 0.114 * b;
-  const c = Math.sqrt(Math.pow(r - l, 2) + Math.pow(g - l, 2) + Math.pow(b - l, 2)) * 0.3;
-  const h = Math.atan2(g - l, r - l) * 180 / Math.PI;
-  
-  return { l, c, h: h < 0 ? h + 360 : h };
+export interface ThemeConfig {
+  name: string;
+  baseColor: string; // Couleur OKLCH de base
+  font: string;
+  spacing: SpacingScale;
+  radius: RadiusScale;
+  shadow: ShadowScale;
 }
 
+export type SpacingScale = 'tight' | 'normal' | 'relaxed';
+export type RadiusScale = 'sharp' | 'rounded' | 'soft' | 'full';
+export type ShadowScale = 'none' | 'subtle' | 'medium' | 'strong';
+
 /**
- * Parse une couleur OKLCH ou convertit depuis hex
+ * Parse une couleur OKLCH
  */
-function parseColor(color: string): { l: number; c: number; h: number } {
-  if (color.startsWith('oklch(')) {
-    // Extraire les valeurs OKLCH
-    const match = color.match(/oklch\(([\d.]+%?)\s+([\d.]+)\s+([\d.]+)\)/);
+function parseOklch(oklchString: string): { l: number; c: number; h: number } {
+  if (oklchString.startsWith('oklch(')) {
+    const match = oklchString.match(/oklch\(([\d.]+%?)\s+([\d.]+)\s+([\d.]+)\)/);
     if (match) {
       const l = parseFloat(match[1].replace('%', '')) / (match[1].includes('%') ? 100 : 1);
       const c = parseFloat(match[2]);
@@ -32,97 +30,162 @@ function parseColor(color: string): { l: number; c: number; h: number } {
     }
   }
   
-  // Fallback vers hex
-  return hexToOklch(color);
+  // Format simple : "50% 0.1 200"
+  const values = oklchString.split(/\s+/);
+  if (values.length === 3) {
+    const l = parseFloat(values[0].replace('%', '')) / (values[0].includes('%') ? 100 : 1);
+    const c = parseFloat(values[1]);
+    const h = parseFloat(values[2]);
+    return { l, c, h };
+  }
+  
+  // Fallback
+  return { l: 0.5, c: 0.1, h: 200 };
 }
 
 /**
- * Génère des variantes d'une couleur de base
+ * Génère 9 couleurs fondamentales à partir d'une couleur de base OKLCH
  */
-function generateVariants(baseColor: string) {
-  const oklch = parseColor(baseColor);
+function generateColorPalette(baseOklch: string) {
+  const base = parseOklch(baseOklch);
+  
+  const formatOklch = (l: number, c: number, h: number) => 
+    `oklch(${(l * 100).toFixed(1)}% ${c.toFixed(3)} ${h.toFixed(0)})`;
   
   return {
-    // Couleur de base
-    base: `oklch(${oklch.l.toFixed(3)} ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)})`,
+    // 1. Primary - Couleur de base
+    primary: formatOklch(base.l, base.c, base.h),
     
-    // Variantes de luminosité
-    lighter: `oklch(${Math.min(1, oklch.l + 0.2).toFixed(3)} ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)})`,
-    light: `oklch(${Math.min(1, oklch.l + 0.1).toFixed(3)} ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)})`,
-    dark: `oklch(${Math.max(0, oklch.l - 0.1).toFixed(3)} ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)})`,
-    darker: `oklch(${Math.max(0, oklch.l - 0.2).toFixed(3)} ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)})`,
+    // 2. Secondary - Teinte complémentaire (-30°)
+    secondary: formatOklch(base.l + 0.1, base.c * 0.8, (base.h - 30 + 360) % 360),
     
-    // Variantes de saturation
-    muted: `oklch(${oklch.l.toFixed(3)} ${(oklch.c * 0.3).toFixed(3)} ${oklch.h.toFixed(1)})`,
-    vibrant: `oklch(${oklch.l.toFixed(3)} ${Math.min(0.4, oklch.c * 1.5).toFixed(3)} ${oklch.h.toFixed(1)})`,
+    // 3. Accent - Teinte contrastée (+120°)
+    accent: formatOklch(base.l + 0.05, base.c * 1.2, (base.h + 120) % 360),
     
-    // Pour le texte
-    foreground: oklch.l > 0.5 ? 'oklch(0.145 0 0)' : 'oklch(0.985 0 0)',
+    // 4. Muted - Version désaturée
+    muted: formatOklch(base.l + 0.15, base.c * 0.2, base.h),
+    
+    // 5. Success - Vert (120°-140°)
+    success: formatOklch(0.65, 0.15, 130),
+    
+    // 6. Warning - Orange (60°-80°)
+    warning: formatOklch(0.75, 0.18, 70),
+    
+    // 7. Danger - Rouge (20°-40°)
+    danger: formatOklch(0.60, 0.20, 30),
+    
+    // 8. Info - Bleu (240°-260°)
+    info: formatOklch(0.70, 0.15, 250),
+    
+    // 9. Neutral - Gris neutre
+    neutral: formatOklch(0.65, 0.02, base.h)
   };
 }
 
 /**
- * Génère un thème complet à partir de deux couleurs principales
+ * Génère les échelles d'espacement
  */
-export function generateTheme(primaryColor: string, secondaryColor: string) {
-  const primary = generateVariants(primaryColor);
-  const secondary = generateVariants(secondaryColor);
+function generateSpacing(scale: SpacingScale) {
+  const scales = {
+    tight: { xs: '0.25rem', sm: '0.5rem', md: '0.75rem', lg: '1rem', xl: '1.5rem' },
+    normal: { xs: '0.5rem', sm: '0.75rem', md: '1rem', lg: '1.5rem', xl: '2rem' },
+    relaxed: { xs: '0.75rem', sm: '1rem', md: '1.5rem', lg: '2rem', xl: '3rem' }
+  };
+  return scales[scale];
+}
+
+/**
+ * Génère les rayons de bordure
+ */
+function generateRadius(scale: RadiusScale) {
+  const scales = {
+    sharp: { sm: '0', md: '0', lg: '0', full: '0' },
+    rounded: { sm: '0.125rem', md: '0.25rem', lg: '0.375rem', full: '0.5rem' },
+    soft: { sm: '0.375rem', md: '0.5rem', lg: '0.75rem', full: '1rem' },
+    full: { sm: '0.5rem', md: '0.75rem', lg: '1rem', full: '9999px' }
+  };
+  return scales[scale];
+}
+
+/**
+ * Génère les ombres
+ */
+function generateShadows(scale: ShadowScale) {
+  const scales = {
+    none: { sm: 'none', md: 'none', lg: 'none', xl: 'none' },
+    subtle: { 
+      sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)', 
+      md: '0 1px 3px 0 rgb(0 0 0 / 0.1)', 
+      lg: '0 4px 6px -1px rgb(0 0 0 / 0.1)', 
+      xl: '0 10px 15px -3px rgb(0 0 0 / 0.1)' 
+    },
+    medium: { 
+      sm: '0 1px 3px 0 rgb(0 0 0 / 0.1)', 
+      md: '0 4px 6px -1px rgb(0 0 0 / 0.1)', 
+      lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)', 
+      xl: '0 20px 25px -5px rgb(0 0 0 / 0.1)' 
+    },
+    strong: { 
+      sm: '0 4px 6px -1px rgb(0 0 0 / 0.1)', 
+      md: '0 10px 15px -3px rgb(0 0 0 / 0.1)', 
+      lg: '0 20px 25px -5px rgb(0 0 0 / 0.1)', 
+      xl: '0 25px 50px -12px rgb(0 0 0 / 0.25)' 
+    }
+  };
+  return scales[scale];
+}
+
+/**
+ * Génère un thème complet à partir de la configuration
+ */
+export function generateTheme(config: ThemeConfig) {
+  const colors = generateColorPalette(config.baseColor);
+  const spacing = generateSpacing(config.spacing);
+  const radius = generateRadius(config.radius);
+  const shadows = generateShadows(config.shadow);
   
   return {
-    light: {
-      // Couleurs principales
-      primary: primary.base,
-      'primary-foreground': primary.foreground,
-      secondary: secondary.lighter,
-      'secondary-foreground': secondary.foreground,
-      
-      // Couleurs d'interface
-      background: 'oklch(1 0 0)',
-      foreground: 'oklch(0.145 0 0)',
-      card: 'oklch(1 0 0)',
-      'card-foreground': 'oklch(0.145 0 0)',
-      popover: 'oklch(1 0 0)',
-      'popover-foreground': 'oklch(0.145 0 0)',
-      
-      // Couleurs neutres basées sur la couleur primaire
-      muted: primary.muted,
-      'muted-foreground': 'oklch(0.556 0 0)',
-      accent: secondary.muted,
-      'accent-foreground': secondary.foreground,
-      
-      // Couleurs système
-      destructive: 'oklch(0.577 0.245 27.325)',
-      border: 'oklch(0.922 0 0)',
-      input: 'oklch(0.922 0 0)',
-      ring: primary.muted,
-    },
+    name: config.name,
+    colors,
+    spacing,
+    radius,
+    shadows,
+    font: config.font,
     
-    dark: {
-      // Couleurs principales
-      primary: primary.light,
-      'primary-foreground': 'oklch(0.145 0 0)',
-      secondary: secondary.dark,
-      'secondary-foreground': 'oklch(0.985 0 0)',
+    // CSS Variables
+    cssVariables: {
+      // Couleurs
+      '--color-primary': colors.primary,
+      '--color-secondary': colors.secondary,
+      '--color-accent': colors.accent,
+      '--color-muted': colors.muted,
+      '--color-success': colors.success,
+      '--color-warning': colors.warning,
+      '--color-danger': colors.danger,
+      '--color-info': colors.info,
+      '--color-neutral': colors.neutral,
       
-      // Couleurs d'interface
-      background: 'oklch(0.145 0 0)',
-      foreground: 'oklch(0.985 0 0)',
-      card: 'oklch(0.205 0 0)',
-      'card-foreground': 'oklch(0.985 0 0)',
-      popover: 'oklch(0.205 0 0)',
-      'popover-foreground': 'oklch(0.985 0 0)',
+      // Espacement
+      '--spacing-xs': spacing.xs,
+      '--spacing-sm': spacing.sm,
+      '--spacing-md': spacing.md,
+      '--spacing-lg': spacing.lg,
+      '--spacing-xl': spacing.xl,
       
-      // Couleurs neutres
-      muted: 'oklch(0.269 0 0)',
-      'muted-foreground': 'oklch(0.708 0 0)',
-      accent: secondary.darker,
-      'accent-foreground': 'oklch(0.985 0 0)',
+      // Rayons
+      '--radius-sm': radius.sm,
+      '--radius-md': radius.md,
+      '--radius-lg': radius.lg,
+      '--radius-full': radius.full,
       
-      // Couleurs système
-      destructive: 'oklch(0.704 0.191 22.216)',
-      border: 'oklch(1 0 0 / 10%)',
-      input: 'oklch(1 0 0 / 15%)',
-      ring: primary.muted,
+      // Ombres
+      '--shadow-sm': shadows.sm,
+      '--shadow-md': shadows.md,
+      '--shadow-lg': shadows.lg,
+      '--shadow-xl': shadows.xl,
+      
+      // Police
+      '--font-family': config.font
     }
   };
 }
@@ -130,59 +193,135 @@ export function generateTheme(primaryColor: string, secondaryColor: string) {
 /**
  * Applique un thème généré au DOM
  */
-export function applyTheme(theme: ReturnType<typeof generateTheme>, mode: 'light' | 'dark') {
+export function applyTheme(theme: ReturnType<typeof generateTheme>) {
   const root = document.documentElement;
-  const colors = theme[mode];
   
-  Object.entries(colors).forEach(([key, value]) => {
-    root.style.setProperty(`--${key}`, value);
+  // Appliquer toutes les variables CSS
+  Object.entries(theme.cssVariables).forEach(([property, value]) => {
+    root.style.setProperty(property, value);
+  });
+  
+  // Appliquer la police à la page entière
+  root.style.setProperty('font-family', theme.font);
+  
+  // Mettre à jour les composants spécifiques de prévisualisation
+  updatePreviewComponents(theme);
+}
+
+/**
+ * Met à jour les composants de prévisualisation avec le nouveau thème
+ */
+function updatePreviewComponents(theme: ReturnType<typeof generateTheme>) {
+  // Mettre à jour les boutons de couleur
+  const colorButtons = document.querySelectorAll('[data-preview="color-button"]');
+  colorButtons.forEach((button, index) => {
+    const colorNames = Object.keys(theme.colors);
+    const colorName = colorNames[index];
+    if (colorName && button instanceof HTMLElement) {
+      button.style.backgroundColor = theme.colors[colorName as keyof typeof theme.colors];
+      button.style.borderRadius = theme.radius.md;
+      button.style.boxShadow = theme.shadows.sm;
+      button.style.fontFamily = theme.font;
+    }
+  });
+  
+  // Mettre à jour les alertes
+  const alerts = document.querySelectorAll('[data-preview="alert"]');
+  alerts.forEach((alert) => {
+    if (alert instanceof HTMLElement) {
+      alert.style.borderRadius = theme.radius.md;
+      alert.style.fontFamily = theme.font;
+    }
+  });
+  
+  // Mettre à jour les cards avec formulaires
+  const cards = document.querySelectorAll('[data-preview="card"]');
+  cards.forEach((card, index) => {
+    if (card instanceof HTMLElement) {
+      const colorNames = ['primary', 'secondary', 'accent', 'muted'];
+      const colorName = colorNames[index];
+      
+      // Mettre à jour la card elle-même
+      card.style.borderRadius = theme.radius.lg;
+      card.style.boxShadow = theme.shadows.md;
+      card.style.fontFamily = theme.font;
+      
+      // Mettre à jour le titre de couleur
+      const title = card.querySelector('h3');
+      if (title && colorName) {
+        title.style.color = theme.colors[colorName as keyof typeof theme.colors];
+      }
+      
+      // Mettre à jour les inputs
+      const inputs = card.querySelectorAll('input');
+      inputs.forEach((input) => {
+        if (input instanceof HTMLElement) {
+          input.style.borderRadius = theme.radius.sm;
+          input.style.fontFamily = theme.font;
+        }
+      });
+      
+      // Mettre à jour le bouton
+      const button = card.querySelector('button');
+      if (button && colorName) {
+        button.style.backgroundColor = theme.colors[colorName as keyof typeof theme.colors];
+        button.style.borderRadius = theme.radius.sm;
+        button.style.boxShadow = theme.shadows.sm;
+        button.style.fontFamily = theme.font;
+      }
+    }
   });
 }
 
 /**
- * Thèmes prédéfinis avec leurs couleurs de base
+ * Génère le code CSS complet pour un thème
+ */
+export function generateCSSCode(theme: ReturnType<typeof generateTheme>) {
+  const variables = Object.entries(theme.cssVariables)
+    .map(([property, value]) => `    ${property}: ${value};`)
+    .join('\n');
+    
+  return `@layer base {
+  :root {
+${variables}
+  }
+}`;
+}
+
+/**
+ * Polices prédéfinies
+ */
+export const PREDEFINED_FONTS = [
+  { name: 'Inter', value: 'Inter, system-ui, sans-serif' },
+  { name: 'Roboto', value: 'Roboto, system-ui, sans-serif' },
+  { name: 'Open Sans', value: '"Open Sans", system-ui, sans-serif' },
+  { name: 'Lato', value: 'Lato, system-ui, sans-serif' },
+  { name: 'Poppins', value: 'Poppins, system-ui, sans-serif' },
+  { name: 'Montserrat', value: 'Montserrat, system-ui, sans-serif' },
+  { name: 'Source Sans Pro', value: '"Source Sans Pro", system-ui, sans-serif' },
+  { name: 'System UI', value: 'system-ui, -apple-system, sans-serif' }
+] as const;
+
+/**
+ * Configuration par défaut
+ */
+export const DEFAULT_THEME_CONFIG: ThemeConfig = {
+  name: "Mon Thème",
+  baseColor: "oklch(60% 0.15 220)",
+  font: "Inter, system-ui, sans-serif",
+  spacing: "normal",
+  radius: "rounded",
+  shadow: "medium"
+};
+
+/**
+ * Anciennes constantes pour compatibilité
  */
 export const PREDEFINED_THEMES = [
   {
     name: "Default",
     value: "default",
-    primary: "#0f172a",
-    secondary: "#64748b"
-  },
-  {
-    name: "Produire",
-    value: "produire",
-    primary: "oklch(55.56% 0.101 187.12)",
-    secondary: "oklch(66.18% 0.089 187.27)"
-  },
-  {
-    name: "Comprendre",
-    value: "comprendre",
-    primary: "oklch(75.88% 0.163 67.94)",
-    secondary: "oklch(45.6% 0.095 187.06)"
-  },
-  {
-    name: "Optimiser",
-    value: "optimiser",
-    primary: "oklch(55.87% 0.136 263.59)",
-    secondary: "oklch(67.92% 0.112 236.64)"
-  },
-  {
-    name: "Ocean",
-    value: "ocean",
-    primary: "#0ea5e9", // sky-500
-    secondary: "#06b6d4"  // cyan-500
-  },
-  {
-    name: "Forest",
-    value: "forest", 
-    primary: "#16a34a", // green-600
-    secondary: "#65a30d"  // lime-600
-  },
-  {
-    name: "Sunset",
-    value: "sunset",
-    primary: "#ea580c", // orange-600
-    secondary: "#dc2626"  // red-600
+    primary: "oklch(60% 0.15 220)",
+    secondary: "oklch(70% 0.12 190)"
   }
 ] as const;

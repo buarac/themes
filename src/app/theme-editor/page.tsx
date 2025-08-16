@@ -3,79 +3,69 @@
 import { useState, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Alert } from "@/components/ui/alert"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Copy, Palette, Eye, Code, Lightbulb, RefreshCw } from "lucide-react"
-import { generateTheme, applyTheme } from "@/lib/theme-generator"
+// Select component removed - using buttons instead
+import { Copy, Palette, Eye, Code, RefreshCw, CheckCircle, AlertTriangle, XCircle, Info } from "lucide-react"
+import { 
+  generateTheme, 
+  applyTheme, 
+  generateCSSCode,
+  DEFAULT_THEME_CONFIG,
+  PREDEFINED_FONTS,
+  type ThemeConfig
+} from "@/lib/theme-generator"
 import { ThemeSwitcher } from "@/components/theme/theme-switcher"
 import { MainNav } from "@/components/navigation/main-nav"
 
-interface ColorPicker {
-  primary: string;
-  secondary: string;
-  name: string;
-}
-
 export default function ThemeEditor() {
-  const [themeConfig, setThemeConfig] = useState<ColorPicker>({
-    name: "Mon Thème",
-    primary: "#3b82f6",
-    secondary: "#06b6d4"
-  })
-  
+  const [themeConfig, setThemeConfig] = useState<ThemeConfig>(DEFAULT_THEME_CONFIG)
   const [isPreviewMode, setIsPreviewMode] = useState(false)
   const [showCode, setShowCode] = useState(false)
-  const [paletteKey, setPaletteKey] = useState(0) // Pour forcer le re-render de la palette
+  const [paletteKey, setPaletteKey] = useState(0)
   
-  // Générer le thème en temps réel avec invalidation forcée
+  // Générer le thème en temps réel
   const generatedTheme = useMemo(() => {
-    return generateTheme(themeConfig.primary, themeConfig.secondary)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [themeConfig.primary, themeConfig.secondary, paletteKey])
+    return generateTheme(themeConfig)
+  }, [themeConfig, paletteKey])
   
-  const handleColorChange = (type: 'primary' | 'secondary', value: string) => {
+  const handleConfigChange = (field: keyof ThemeConfig, value: string) => {
     setThemeConfig(prev => ({
       ...prev,
-      [type]: value
+      [field]: value
     }))
-    // Forcer la régénération de la palette
     setPaletteKey(prev => prev + 1)
+    
+    // Appliquer immédiatement si en mode préview
+    if (isPreviewMode) {
+      // Le thème sera régénéré avec useMemo et appliqué automatiquement
+      setTimeout(() => {
+        const newTheme = generateTheme({ ...themeConfig, [field]: value })
+        applyTheme(newTheme)
+      }, 0)
+    }
   }
   
   const handleRegenerateTheme = () => {
-    // Force la régénération complète du thème
     setPaletteKey(prev => prev + 1)
     if (isPreviewMode) {
-      // Re-appliquer le thème si on est en mode préview
-      applyTheme(generatedTheme, 'light')
+      applyTheme(generatedTheme)
     }
   }
   
   const handlePreview = () => {
     setIsPreviewMode(!isPreviewMode)
     if (!isPreviewMode) {
-      // Appliquer le thème généré
-      applyTheme(generatedTheme, 'light')
+      applyTheme(generatedTheme)
     } else {
-      // Revenir au thème par défaut
       window.location.reload()
     }
   }
   
-  const generateThemeCode = () => {
-    return `{
-  name: "${themeConfig.name}",
-  value: "${themeConfig.name.toLowerCase().replace(/\s+/g, '-')}",
-  primary: "${themeConfig.primary}",
-  secondary: "${themeConfig.secondary}"
-}`
-  }
-  
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(generateThemeCode())
+    navigator.clipboard.writeText(generateCSSCode(generatedTheme))
   }
 
   return (
@@ -106,6 +96,8 @@ export default function ThemeEditor() {
           
           {/* Panel de Configuration */}
           <div className="space-y-6">
+            
+            {/* Configuration de base */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -113,7 +105,7 @@ export default function ThemeEditor() {
                   Configuration du Thème
                 </CardTitle>
                 <CardDescription>
-                  Créez votre thème personnalisé en choisissant deux couleurs principales
+                  Créez votre thème personnalisé avec une couleur OKLCH de base
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -124,96 +116,149 @@ export default function ThemeEditor() {
                   <Input
                     id="theme-name"
                     value={themeConfig.name}
-                    onChange={(e) => setThemeConfig(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={(e) => handleConfigChange('name', e.target.value)}
                     placeholder="Mon Super Thème"
                   />
                 </div>
 
-                {/* Couleur Principale */}
-                <div className="space-y-3">
-                  <Label>Couleur Principale</Label>
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <input
-                        type="color"
-                        value={themeConfig.primary}
-                        onChange={(e) => handleColorChange('primary', e.target.value)}
-                        className="w-16 h-16 rounded-lg border-2 border-border cursor-pointer"
-                        style={{ backgroundColor: themeConfig.primary }}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <Input
-                        value={themeConfig.primary}
-                        onChange={(e) => handleColorChange('primary', e.target.value)}
-                        placeholder="#3b82f6"
-                        className="font-mono"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Utilisée pour les boutons, liens et éléments d&apos;action
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Couleur Secondaire */}
-                <div className="space-y-3">
-                  <Label>Couleur Secondaire</Label>
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <input
-                        type="color"
-                        value={themeConfig.secondary}
-                        onChange={(e) => handleColorChange('secondary', e.target.value)}
-                        className="w-16 h-16 rounded-lg border-2 border-border cursor-pointer"
-                        style={{ backgroundColor: themeConfig.secondary }}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <Input
-                        value={themeConfig.secondary}
-                        onChange={(e) => handleColorChange('secondary', e.target.value)}
-                        placeholder="#06b6d4"
-                        className="font-mono"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Utilisée pour les accents et éléments secondaires
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Palette générée */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Label>Palette générée automatiquement</Label>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={handleRegenerateTheme}
-                      className="h-8"
-                    >
-                      <RefreshCw className="h-3 w-3 mr-1" />
-                      Régénérer
-                    </Button>
-                  </div>
-                  <div key={paletteKey} className="grid grid-cols-8 gap-2">
-                    {Object.entries(generatedTheme.light).slice(0, 8).map(([key, color]) => (
-                      <div key={key} className="text-center">
-                        <div 
-                          className="w-full h-8 rounded border border-border transition-all duration-300"
-                          style={{ backgroundColor: color }}
-                          title={`${key}: ${color}`}
-                        />
-                        <span className="text-xs text-muted-foreground">{key.split('-')[0]}</span>
-                      </div>
-                    ))}
-                  </div>
+                {/* Couleur de base OKLCH */}
+                <div className="space-y-2">
+                  <Label htmlFor="base-color">Couleur de base (OKLCH)</Label>
+                  <Input
+                    id="base-color"
+                    value={themeConfig.baseColor}
+                    onChange={(e) => handleConfigChange('baseColor', e.target.value)}
+                    placeholder="oklch(60% 0.15 220)"
+                    className="font-mono"
+                  />
                   <p className="text-xs text-muted-foreground">
-                    La palette se met à jour automatiquement. Utilisez &quot;Régénérer&quot; pour forcer le rafraîchissement.
+                    Format : oklch(lightness% chroma hue) ou &quot;60% 0.15 220&quot;
                   </p>
                 </div>
 
+                {/* Police */}
+                <div className="space-y-2">
+                  <Label>Police de caractères</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {PREDEFINED_FONTS.slice(0, 4).map((font) => (
+                      <Button
+                        key={font.value}
+                        variant={themeConfig.font === font.value ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleConfigChange('font', font.value)}
+                        className="text-xs"
+                      >
+                        {font.name}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Espacement */}
+                <div className="space-y-2">
+                  <Label>Échelle d&apos;espacement</Label>
+                  <div className="flex gap-2">
+                    {[
+                      { value: 'tight', label: 'Serré' },
+                      { value: 'normal', label: 'Normal' },
+                      { value: 'relaxed', label: 'Espacé' }
+                    ].map((item) => (
+                      <Button
+                        key={item.value}
+                        variant={themeConfig.spacing === item.value ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleConfigChange('spacing', item.value)}
+                        className="text-xs"
+                      >
+                        {item.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Rayons */}
+                <div className="space-y-2">
+                  <Label>Rayons de bordure</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { value: 'sharp', label: 'Angulaire' },
+                      { value: 'rounded', label: 'Arrondi' },
+                      { value: 'soft', label: 'Doux' },
+                      { value: 'full', label: 'Très arrondi' }
+                    ].map((item) => (
+                      <Button
+                        key={item.value}
+                        variant={themeConfig.radius === item.value ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleConfigChange('radius', item.value)}
+                        className="text-xs"
+                      >
+                        {item.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Ombres */}
+                <div className="space-y-2">
+                  <Label>Intensité des ombres</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { value: 'none', label: 'Aucune' },
+                      { value: 'subtle', label: 'Subtile' },
+                      { value: 'medium', label: 'Moyenne' },
+                      { value: 'strong', label: 'Forte' }
+                    ].map((item) => (
+                      <Button
+                        key={item.value}
+                        variant={themeConfig.shadow === item.value ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleConfigChange('shadow', item.value)}
+                        className="text-xs"
+                      >
+                        {item.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+              </CardContent>
+            </Card>
+
+            {/* Palette générée */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Palette générée</span>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleRegenerateTheme}
+                  >
+                    <RefreshCw className="h-3 w-3 mr-1" />
+                    Régénérer
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div key={paletteKey} className="grid grid-cols-3 gap-3">
+                  {Object.entries(generatedTheme.colors).map(([name, color]) => (
+                    <div 
+                      key={name} 
+                      className="relative h-20 rounded-lg border transition-all duration-300 flex items-center justify-center"
+                      style={{ backgroundColor: color }}
+                    >
+                      <div className="text-center">
+                        <div className="text-xs font-medium mb-1 text-white drop-shadow-md">
+                          {name}
+                        </div>
+                        <div className="text-xs font-mono text-white drop-shadow-md">
+                          {color}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
 
@@ -222,14 +267,14 @@ export default function ThemeEditor() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Code className="h-5 w-5" />
-                  Export & Code
+                  Export CSS
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex gap-2">
                   <Button onClick={copyToClipboard} variant="outline" size="sm">
                     <Copy className="h-4 w-4 mr-2" />
-                    Copier le Code
+                    Copier le CSS
                   </Button>
                   <Button 
                     onClick={() => setShowCode(!showCode)} 
@@ -243,12 +288,12 @@ export default function ThemeEditor() {
                 
                 {showCode && (
                   <div className="space-y-2">
-                    <Label>Code à ajouter dans PREDEFINED_THEMES :</Label>
+                    <Label>Code CSS pour votre projet :</Label>
                     <Textarea
-                      value={generateThemeCode()}
+                      value={generateCSSCode(generatedTheme)}
                       readOnly
                       className="font-mono text-sm"
-                      rows={6}
+                      rows={15}
                     />
                   </div>
                 )}
@@ -262,89 +307,353 @@ export default function ThemeEditor() {
             
             {isPreviewMode && (
               <Alert>
-                <Lightbulb className="h-4 w-4" />
-                <div>
-                  <h4 className="font-semibold">Mode Prévisualisation Actif</h4>
-                  <div className="text-sm">Votre thème est appliqué à toute la page. Testez les composants ci-dessous.</div>
-                </div>
+                <Info className="h-4 w-4" />
+                <AlertDescription>
+                  Mode prévisualisation actif. Votre thème est appliqué à toute la page.
+                </AlertDescription>
               </Alert>
             )}
 
+            {/* Boutons de couleurs */}
             <Card>
               <CardHeader>
-                <CardTitle>Aperçu du Thème</CardTitle>
+                <CardTitle>Boutons par couleur</CardTitle>
                 <CardDescription>
-                  Prévisualisation des composants avec votre thème
+                  Chaque bouton utilise une couleur fondamentale différente
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                
-                {/* Buttons Preview */}
-                <div className="space-y-3">
-                  <Label>Boutons</Label>
-                  <div className="flex flex-wrap gap-2">
-                    <Button>Bouton Principal</Button>
-                    <Button variant="secondary">Secondaire</Button>
-                    <Button variant="outline">Outline</Button>
-                    <Button variant="ghost">Ghost</Button>
-                  </div>
+              <CardContent>
+                <div className="grid grid-cols-3 gap-3">
+                  {Object.entries(generatedTheme.colors).map(([name, color]) => (
+                    <Button
+                      key={name}
+                      data-preview="color-button"
+                      style={{ 
+                        backgroundColor: color, 
+                        color: '#fff',
+                        borderRadius: generatedTheme.radius.md,
+                        boxShadow: generatedTheme.shadows.sm,
+                        fontFamily: generatedTheme.font
+                      }}
+                      className="text-xs"
+                    >
+                      {name}
+                    </Button>
+                  ))}
                 </div>
-
-                {/* Cards Preview */}
-                <div className="space-y-3">
-                  <Label>Cartes</Label>
-                  <div className="grid gap-3 md:grid-cols-2">
-                    <Card>
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-sm">Carte d'exemple</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          Contenu de la carte avec le nouveau thème
-                        </p>
-                        <div className="flex gap-2 mt-3">
-                          <Badge>Badge 1</Badge>
-                          <Badge variant="secondary">Badge 2</Badge>
-                        </div>
-                      </CardContent>
-                    </Card>
-                    
-                    <Card>
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-sm">Statistiques</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span>Progression</span>
-                            <span>75%</span>
-                          </div>
-                          <div className="w-full bg-secondary rounded-full h-2">
-                            <div className="bg-primary h-2 rounded-full" style={{ width: "75%" }}></div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-
-                {/* Form Preview */}
-                <div className="space-y-3">
-                  <Label>Formulaires</Label>
-                  <div className="space-y-3">
-                    <div className="grid gap-2">
-                      <Label htmlFor="demo-input">Champ de saisie</Label>
-                      <Input id="demo-input" placeholder="Tapez quelque chose..." />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="demo-textarea">Zone de texte</Label>
-                      <Textarea id="demo-textarea" placeholder="Message..." rows={3} />
-                    </div>
-                  </div>
-                </div>
-
               </CardContent>
             </Card>
+
+            {/* Alertes avec couleurs système */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Alertes système</CardTitle>
+                <CardDescription>
+                  Alertes avec les couleurs success, warning, danger et info
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Alert 
+                  data-preview="alert"
+                  style={{ 
+                    borderColor: generatedTheme.colors.success, 
+                    backgroundColor: `${generatedTheme.colors.success}10`,
+                    borderRadius: generatedTheme.radius.md,
+                    fontFamily: generatedTheme.font
+                  }}
+                >
+                  <CheckCircle className="h-4 w-4" style={{ color: generatedTheme.colors.success }} />
+                  <AlertDescription style={{ color: generatedTheme.colors.success }}>
+                    Opération réussie avec la couleur success
+                  </AlertDescription>
+                </Alert>
+                
+                <Alert 
+                  data-preview="alert"
+                  style={{ 
+                    borderColor: generatedTheme.colors.warning, 
+                    backgroundColor: `${generatedTheme.colors.warning}10`,
+                    borderRadius: generatedTheme.radius.md,
+                    fontFamily: generatedTheme.font
+                  }}
+                >
+                  <AlertTriangle className="h-4 w-4" style={{ color: generatedTheme.colors.warning }} />
+                  <AlertDescription style={{ color: generatedTheme.colors.warning }}>
+                    Attention, alerte avec la couleur warning
+                  </AlertDescription>
+                </Alert>
+                
+                <Alert 
+                  data-preview="alert"
+                  style={{ 
+                    borderColor: generatedTheme.colors.danger, 
+                    backgroundColor: `${generatedTheme.colors.danger}10`,
+                    borderRadius: generatedTheme.radius.md,
+                    fontFamily: generatedTheme.font
+                  }}
+                >
+                  <XCircle className="h-4 w-4" style={{ color: generatedTheme.colors.danger }} />
+                  <AlertDescription style={{ color: generatedTheme.colors.danger }}>
+                    Erreur critique avec la couleur danger
+                  </AlertDescription>
+                </Alert>
+                
+                <Alert 
+                  data-preview="alert"
+                  style={{ 
+                    borderColor: generatedTheme.colors.info, 
+                    backgroundColor: `${generatedTheme.colors.info}10`,
+                    borderRadius: generatedTheme.radius.md,
+                    fontFamily: generatedTheme.font
+                  }}
+                >
+                  <Info className="h-4 w-4" style={{ color: generatedTheme.colors.info }} />
+                  <AlertDescription style={{ color: generatedTheme.colors.info }}>
+                    Information importante avec la couleur info
+                  </AlertDescription>
+                </Alert>
+              </CardContent>
+            </Card>
+
+            {/* Cards avec couleurs principales */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Cards thématiques</CardTitle>
+                <CardDescription>
+                  Formulaires utilisant les couleurs primary, secondary, accent et muted
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-4 md:grid-cols-2">
+                
+                <Card 
+                  data-preview="card"
+                  style={{ 
+                    borderRadius: generatedTheme.radius.lg,
+                    boxShadow: generatedTheme.shadows.md,
+                    fontFamily: generatedTheme.font
+                  }}
+                >
+                  <CardHeader className="pb-3">
+                    <CardTitle 
+                      className="text-sm"
+                      style={{ color: generatedTheme.colors.primary }}
+                    >
+                      Primary Form
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="primary-name" className="text-xs">Nom</Label>
+                      <Input
+                        id="primary-name"
+                        placeholder="Votre nom"
+                        className="text-xs h-7"
+                        style={{
+                          borderRadius: generatedTheme.radius.sm,
+                          fontFamily: generatedTheme.font
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="primary-email" className="text-xs">Email</Label>
+                      <Input
+                        id="primary-email"
+                        type="email"
+                        placeholder="email@exemple.com"
+                        className="text-xs h-7"
+                        style={{
+                          borderRadius: generatedTheme.radius.sm,
+                          fontFamily: generatedTheme.font
+                        }}
+                      />
+                    </div>
+                    <Button
+                      size="sm"
+                      className="w-full text-xs"
+                      style={{
+                        backgroundColor: generatedTheme.colors.primary,
+                        borderRadius: generatedTheme.radius.sm,
+                        boxShadow: generatedTheme.shadows.sm,
+                        fontFamily: generatedTheme.font
+                      }}
+                    >
+                      Valider
+                    </Button>
+                  </CardContent>
+                </Card>
+                
+                <Card 
+                  data-preview="card"
+                  style={{ 
+                    borderRadius: generatedTheme.radius.lg,
+                    boxShadow: generatedTheme.shadows.md,
+                    fontFamily: generatedTheme.font
+                  }}
+                >
+                  <CardHeader className="pb-3">
+                    <CardTitle 
+                      className="text-sm"
+                      style={{ color: generatedTheme.colors.secondary }}
+                    >
+                      Secondary Form
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="secondary-title" className="text-xs">Titre</Label>
+                      <Input
+                        id="secondary-title"
+                        placeholder="Votre titre"
+                        className="text-xs h-7"
+                        style={{
+                          borderRadius: generatedTheme.radius.sm,
+                          fontFamily: generatedTheme.font
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="secondary-message" className="text-xs">Message</Label>
+                      <Input
+                        id="secondary-message"
+                        placeholder="Votre message"
+                        className="text-xs h-7"
+                        style={{
+                          borderRadius: generatedTheme.radius.sm,
+                          fontFamily: generatedTheme.font
+                        }}
+                      />
+                    </div>
+                    <Button
+                      size="sm"
+                      className="w-full text-xs"
+                      style={{
+                        backgroundColor: generatedTheme.colors.secondary,
+                        borderRadius: generatedTheme.radius.sm,
+                        boxShadow: generatedTheme.shadows.sm,
+                        fontFamily: generatedTheme.font
+                      }}
+                    >
+                      Envoyer
+                    </Button>
+                  </CardContent>
+                </Card>
+                
+                <Card 
+                  data-preview="card"
+                  style={{ 
+                    borderRadius: generatedTheme.radius.lg,
+                    boxShadow: generatedTheme.shadows.md,
+                    fontFamily: generatedTheme.font
+                  }}
+                >
+                  <CardHeader className="pb-3">
+                    <CardTitle 
+                      className="text-sm"
+                      style={{ color: generatedTheme.colors.accent }}
+                    >
+                      Accent Form
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="accent-user" className="text-xs">Utilisateur</Label>
+                      <Input
+                        id="accent-user"
+                        placeholder="Nom d'utilisateur"
+                        className="text-xs h-7"
+                        style={{
+                          borderRadius: generatedTheme.radius.sm,
+                          fontFamily: generatedTheme.font
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="accent-password" className="text-xs">Mot de passe</Label>
+                      <Input
+                        id="accent-password"
+                        type="password"
+                        placeholder="••••••••"
+                        className="text-xs h-7"
+                        style={{
+                          borderRadius: generatedTheme.radius.sm,
+                          fontFamily: generatedTheme.font
+                        }}
+                      />
+                    </div>
+                    <Button
+                      size="sm"
+                      className="w-full text-xs"
+                      style={{
+                        backgroundColor: generatedTheme.colors.accent,
+                        borderRadius: generatedTheme.radius.sm,
+                        boxShadow: generatedTheme.shadows.sm,
+                        fontFamily: generatedTheme.font
+                      }}
+                    >
+                      Connexion
+                    </Button>
+                  </CardContent>
+                </Card>
+                
+                <Card 
+                  data-preview="card"
+                  style={{ 
+                    borderRadius: generatedTheme.radius.lg,
+                    boxShadow: generatedTheme.shadows.md,
+                    fontFamily: generatedTheme.font
+                  }}
+                >
+                  <CardHeader className="pb-3">
+                    <CardTitle 
+                      className="text-sm"
+                      style={{ color: generatedTheme.colors.muted }}
+                    >
+                      Muted Form
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="muted-search" className="text-xs">Recherche</Label>
+                      <Input
+                        id="muted-search"
+                        placeholder="Rechercher..."
+                        className="text-xs h-7"
+                        style={{
+                          borderRadius: generatedTheme.radius.sm,
+                          fontFamily: generatedTheme.font
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="muted-filter" className="text-xs">Filtre</Label>
+                      <Input
+                        id="muted-filter"
+                        placeholder="Filtrer par..."
+                        className="text-xs h-7"
+                        style={{
+                          borderRadius: generatedTheme.radius.sm,
+                          fontFamily: generatedTheme.font
+                        }}
+                      />
+                    </div>
+                    <Button
+                      size="sm"
+                      className="w-full text-xs"
+                      style={{
+                        backgroundColor: generatedTheme.colors.muted,
+                        borderRadius: generatedTheme.radius.sm,
+                        boxShadow: generatedTheme.shadows.sm,
+                        fontFamily: generatedTheme.font
+                      }}
+                    >
+                      Appliquer
+                    </Button>
+                  </CardContent>
+                </Card>
+                
+              </CardContent>
+            </Card>
+
           </div>
         </div>
       </div>
